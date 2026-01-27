@@ -1,0 +1,104 @@
+import sys
+import os
+from logging.config import fileConfig
+from sqlalchemy import engine_from_config, pool
+from alembic import context
+from dotenv import load_dotenv
+
+# --------------------------------------------------
+# PATH FIX
+# --------------------------------------------------
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(BASE_DIR)
+
+# --------------------------------------------------
+# ENV
+# --------------------------------------------------
+from dotenv import load_dotenv
+import os
+from pathlib import Path
+
+# Ensure we load the correct .env file
+BASE_DIR = Path(__file__).resolve().parent.parent  # adjust depending on your folder
+load_dotenv(BASE_DIR / ".env")
+
+database_url = os.getenv("DATABASE_URL")
+if not database_url:
+    raise RuntimeError("DATABASE_URL is not set. Check your .env file!")
+
+print("Loaded DATABASE_URL:", database_url)  # temporary check
+
+from alembic import context
+from backend.app.core.base import Base
+from backend.app.models.user import User
+from backend.app.models.notes import Note
+
+config = context.config
+target_metadata = Base.metadata
+
+config.set_main_option("sqlalchemy.url", database_url)
+
+
+# --------------------------------------------------
+# IMPORT MODELS
+# --------------------------------------------------
+from backend.app.core.base import Base
+from backend.app.models.user import User
+from backend.app.models.notes import Note
+
+# --------------------------------------------------
+# ALEMBIC CONFIG
+# --------------------------------------------------
+config = context.config
+
+if config.config_file_name is not None:
+    fileConfig(config.config_file_name)
+
+# Tell Alembic where models are
+target_metadata = Base.metadata
+
+# Inject DATABASE_URL from .env
+database_url = os.getenv("DATABASE_URL")
+
+if not database_url:
+    raise RuntimeError("DATABASE_URL is not set in .env")
+
+config.set_main_option("sqlalchemy.url", database_url)
+
+
+# --------------------------------------------------
+# MIGRATIONS
+# --------------------------------------------------
+def run_migrations_offline():
+    context.configure(
+        url=os.getenv("DATABASE_URL"),
+        target_metadata=target_metadata,
+        literal_binds=True,
+        dialect_opts={"paramstyle": "named"},
+    )
+
+    with context.begin_transaction():
+        context.run_migrations()
+
+
+def run_migrations_online():
+    connectable = engine_from_config(
+        config.get_section(config.config_ini_section),
+        prefix="sqlalchemy.",
+        poolclass=pool.NullPool,
+    )
+
+    with connectable.connect() as connection:
+        context.configure(
+            connection=connection,
+            target_metadata=target_metadata,
+        )
+
+        with context.begin_transaction():
+            context.run_migrations()
+
+
+if context.is_offline_mode():
+    run_migrations_offline()
+else:
+    run_migrations_online()
