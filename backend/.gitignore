@@ -1,0 +1,28 @@
+# -------------------------
+# FastAPI / Python backend
+# -------------------------
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+*.db
+
+# Virtual environments
+.env
+.venv/
+venv/
+env/
+
+# Dependency files
+*.egg-info/
+*.eggs/
+dist/
+build/
+
+# IDE configs
+.vscode/
+.idea/
+
+# Logs
+*.log
