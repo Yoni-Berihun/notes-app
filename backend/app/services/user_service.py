@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from passlib.hash import bcrypt
+from backend.app.core.token import create_access_token
 from backend.app.repositories.note import (
     get_user_by_email,
     create_user,
@@ -27,4 +28,13 @@ async def authenticate_user(db:AsyncSession, email:str, password:str)  :
             return existing_user
     return None
 
+async def login_user(db: AsyncSession, email: str, password: str):
+    user = await authenticate_user(db, email, password)
+    if not user:
+        return None
+    
+    token_data = {"sub": str(user.id), "email": user.email}
+    access_token = create_access_token(token_data)
+    
+    return {"access_token": access_token, "token_type": "bearer", "user": user}
     
