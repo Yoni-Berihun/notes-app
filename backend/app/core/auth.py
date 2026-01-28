@@ -1,6 +1,8 @@
 import jwt
 from datetime import datetime, timedelta
 from typing import Optional
+from jose import JWTError, jwt
+from fastapi import HTTPException, status
 
 from backend.app.models.user import User
 from backend.app.core.config import settings  # For secret key and algorithm
@@ -21,12 +23,23 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
     return encoded_jwt
 
-# Function to verify JWT token
-def verify_access_token(token: str) -> dict:
+# Function to verify JWT token    
+
+def verify_access_token(token: str) -> str:
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
-        return payload  # Returns the decoded data (e.g., user ID, email, etc.)
-    except jwt.ExpiredSignatureError:
-        raise Exception("Token has expired")
-    except jwt.JWTError:
-        raise Exception("Invalid token")
+        user_id: str | None = payload.get("sub")
+
+        if user_id is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid token payload"
+            )
+
+        return user_id
+
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or expired token"
+        )
