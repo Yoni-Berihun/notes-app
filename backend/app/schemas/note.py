@@ -1,7 +1,7 @@
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
 from typing import Optional
-from schemas.base import BaseSchema
+from backend.app.schemas.base import BaseSchema
 from uuid import UUID
 
 

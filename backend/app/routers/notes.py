@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.core.dependencies import get_current_user
-from app.services.note_service import (
+from backend.app.core.dependencies import get_current_user
+from backend.app.services.note_service import (
     create_new_note, get_note_by_id_service, update_existing_note, delete_existing_note
 )
-from app.schemas.note import NoteCreate, NoteRead, NoteUpdate
-from app.models.user import User
-from app.core.database import get_db
+from backend.app.schemas.note import NoteCreate, NoteRead, NoteUpdate
+from backend.app.models.user import User
+from backend.app.core.database import get_db
 
 router = APIRouter(
     prefix="/notes",

@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from passlib.hash import bcrypt
-from app.core.token import create_access_token
-from app.repositories.note import (
+from backend.app.core.token import create_access_token
+from backend.app.repositories.user import (
     get_user_by_email,
     create_user,
     get_user_by_id,

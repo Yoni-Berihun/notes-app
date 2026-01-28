@@ -4,8 +4,8 @@ from typing import Optional
 from jose import JWTError, jwt
 from fastapi import HTTPException, status
 
-from app.models.user import User
-from app.core.config import settings  # For secret key and algorithm
+from backend.app.models.user import User
+from backend.app.core.config import settings  # For secret key and algorithm
 
 # Function to generate JWT token
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
