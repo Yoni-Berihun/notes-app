@@ -18,6 +18,6 @@ class NoteRead(BaseSchema):
     title:str
     content:str
     created_at:datetime
-    
-
+    class Config:
+        orm_mode = True
     

@@ -31,9 +31,9 @@ async def get_note_by_id_service(db: AsyncSession, note_id: int, user_id: int) -
 async def update_existing_note(
     db: AsyncSession, 
     note_id: int, 
+    user_id: int,
     title: str | None = None, 
-    content: str | None = None, 
-    user_id: int
+    content: str | None = None
 ) -> Note:
     note = await get_note_by_id_service(db=db, note_id=note_id, user_id=user_id)
     return await update_note(db=db, note=note, title=title, content=content)
