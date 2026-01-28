@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from backend.app.models.notes import Note
+from app.models.notes import Note
 
 # Create a new note
 async def create_note(db: AsyncSession, title: str, content: str, owner_id: int) -> Note:
