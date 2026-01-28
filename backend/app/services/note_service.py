@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from backend.app.repositories.note import create_note, get_note_by_id, update_note, delete_note
-from backend.app.models.notes import Note
+from app.repositories.note import create_note, get_note_by_id, update_note, delete_note
+from app.models.notes import Note
 from fastapi import HTTPException, status
 
 # Create a new note
